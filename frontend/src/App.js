@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { FavoritesProvider } from "./context/FavoritesContext";
 
 /* ================= PUBLIC ================= */
 import Home from "./pages/Home";
@@ -22,7 +21,7 @@ import OrderDetails from "./pages/buyer/OrderDetails";
 
 /* ================= SUPPLIER ================= */
 import SupplierDashboardHub from "./pages/supplier/SupplierDashboardHub";
-import SupplierAddProduct from "./pages/supplier/AddProduct";
+import SupplierAddProduct from "./pages/supplier/products";   // 🔧 FIXED
 import SupplierInventory from "./pages/supplier/Inventory";
 import SupplierOrders from "./pages/supplier/ordersReceived";
 import SupplierInvoices from "./pages/supplier/Invoices";
@@ -51,68 +50,47 @@ const AdminRoute = ({ children }) =>
 function App() {
   return (
     <BrowserRouter>
-      <FavoritesProvider>
-        <Routes>
+      <Routes>
 
-          {/* ROOT REDIRECT */}
-          <Route
-            path="/"
-            element={
-              <Navigate
-                to={
-                  getRole() === "buyer"
-                    ? "/buyer"
-                    : getRole() === "supplier"
-                    ? "/supplier"
-                    : getRole() === "admin"
-                    ? "/admin/dashboard"
-                    : "/home"
-                }
-                replace
-              />
-            }
-          />
+        {/* ROOT → HOME */}
+        <Route path="/" element={<Home />} />
 
-          {/* PUBLIC */}
-          <Route path="/home" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+        {/* PUBLIC */}
+        <Route path="/home" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          {/* BUYER */}
-          <Route path="/buyer" element={<BuyerRoute><BuyerLayout /></BuyerRoute>}>
-            <Route index element={<BuyerDashboard />} />
-            <Route path="products" element={<ProductCatalog />} />
-            <Route path="orders" element={<OrdersPage />} />
-            <Route path="orders/:orderId" element={<OrderDetails />} />
-            <Route path="cart" element={<Cart />} />
-            <Route path="favorites" element={<Favorites />} />
-            <Route path="addresses" element={<Addresses />} />
-            <Route path="checkout" element={<Checkout />} />
-            <Route path="order-success" element={<OrderSuccess />} />
-          </Route>
+        {/* BUYER */}
+        <Route path="/buyer" element={<BuyerRoute><BuyerLayout /></BuyerRoute>}>
+          <Route index element={<BuyerDashboard />} />
+          <Route path="products" element={<ProductCatalog />} />
+          <Route path="orders" element={<OrdersPage />} />
+          <Route path="orders/:orderId" element={<OrderDetails />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="favorites" element={<Favorites />} />
+          <Route path="addresses" element={<Addresses />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="order-success" element={<OrderSuccess />} />
+        </Route>
 
-          {/* SUPPLIER */}
-          <Route path="/supplier" element={<SupplierRoute><SupplierDashboardHub /></SupplierRoute>} />
-          <Route path="/supplier/add-product" element={<SupplierRoute><SupplierAddProduct /></SupplierRoute>} />
-          <Route path="/supplier/inventory" element={<SupplierRoute><SupplierInventory /></SupplierRoute>} />
-          <Route path="/supplier/orders" element={<SupplierRoute><SupplierOrders /></SupplierRoute>} />
-          <Route path="/supplier/invoices" element={<SupplierRoute><SupplierInvoices /></SupplierRoute>} />
-          <Route path="/supplier/profile" element={<SupplierRoute><SupplierProfile /></SupplierRoute>} />
+        {/* SUPPLIER */}
+        <Route path="/supplier" element={<SupplierRoute><SupplierDashboardHub /></SupplierRoute>} />
+        <Route path="/supplier/add-product" element={<SupplierRoute><SupplierAddProduct /></SupplierRoute>} />
+        <Route path="/supplier/inventory" element={<SupplierRoute><SupplierInventory /></SupplierRoute>} />
+        <Route path="/supplier/orders" element={<SupplierRoute><SupplierOrders /></SupplierRoute>} />
+        <Route path="/supplier/invoices" element={<SupplierRoute><SupplierInvoices /></SupplierRoute>} />
+        <Route path="/supplier/profile" element={<SupplierRoute><SupplierProfile /></SupplierRoute>} />
 
-          {/* ADMIN */}
-          <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboardHub /></AdminRoute>} />
-          <Route path="/admin/users" element={<AdminRoute><UserManagement /></AdminRoute>} />
-          <Route path="/admin/suppliers" element={<AdminRoute><SupplierVerification /></AdminRoute>} />
-          <Route path="/admin/products" element={<AdminRoute><ProductApproval /></AdminRoute>} />
-          <Route path="/admin/orders" element={<AdminRoute><OrderDisputes /></AdminRoute>} />
-          <Route path="/admin/analytics" element={<AdminRoute><PlatformAnalytics /></AdminRoute>} />
+        {/* ADMIN */}
+        <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboardHub /></AdminRoute>} />
+        <Route path="/admin/users" element={<AdminRoute><UserManagement /></AdminRoute>} />
+        <Route path="/admin/suppliers" element={<AdminRoute><SupplierVerification /></AdminRoute>} />
+        <Route path="/admin/products" element={<AdminRoute><ProductApproval /></AdminRoute>} />
+        <Route path="/admin/orders" element={<AdminRoute><OrderDisputes /></AdminRoute>} />
+        <Route path="/admin/analytics" element={<AdminRoute><PlatformAnalytics /></AdminRoute>} />
 
-          {/* FALLBACK */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-
-        </Routes>
-      </FavoritesProvider>
+      </Routes>
     </BrowserRouter>
   );
 }
